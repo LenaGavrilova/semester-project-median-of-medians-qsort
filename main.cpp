@@ -1,7 +1,16 @@
 #include <iostream>
 
-using namespace std;
+#include "quick_sort.hpp"
 
-int main(int argc, char *argv[]) {
-  cout << "люблю бутерброды с колбасой" << endl;
+using namespace std;
+using namespace itis;
+
+int main() {
+    std::vector<int> arr = {3, 5, 7, 6, 1, 2, 4, 8};
+
+    QuickSort sort;
+    sort.Sort(arr);
+    for (int i = 0; i < arr.size(); ++i) {
+        cout << arr[i] << " ";
+    }
 }
