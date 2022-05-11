@@ -36,10 +36,10 @@ T(n) = Cn + (2/10+7/10)Cn + (2/10+7/10)(2/10+7/10)Cn +… = Cn * ∑i=0..∞ (9/
 # Структура проекта
 Проект состоит из следующих частей:
 
- * [src] / [include] - реализация алгоритма (исходный код и заголовочные файлы);
- * [benchmark] - контрольные тесты производительности алгоритма;
- * [examples] - примеры работы с данным алгоритмом;
- * [dataset] - наборы данных для запуска контрольных тестов и их генерация;
+ * [src](https://github.com/LenaGavrilova/semester-project-median-of-medians-qsort/tree/main/src) / [include](https://github.com/LenaGavrilova/semester-project-median-of-medians-qsort/tree/main/include) - реализация алгоритма (исходный код и заголовочные файлы);
+ * [benchmark](https://github.com/LenaGavrilova/semester-project-median-of-medians-qsort/tree/main/benchmark) - контрольные тесты производительности алгоритма;
+ * [examples](https://github.com/LenaGavrilova/semester-project-median-of-medians-qsort/tree/main/examples) - примеры работы с данным алгоритмом;
+ * [dataset](https://github.com/LenaGavrilova/semester-project-median-of-medians-qsort/tree/main/dataset) - наборы данных для запуска контрольных тестов и их генерация;
  
  # Требования
 Рекомендуемые требования:
