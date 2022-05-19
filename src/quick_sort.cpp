@@ -1,44 +1,76 @@
 #include "quick_sort.hpp"
 
 #include <cassert>  // assert
+#include <algorithm>
+
+static constexpr auto kGroupSize = 10;
 
 namespace itis {
 
-    int median_of_three(const std::vector<int> &arr, int start, int stop) {
-        assert(!arr.empty() && start >= 0 && stop < arr.size() && start <= stop);
+    /* In case someone wants to pass in the pivValue, I broke partition into 2 pieces.
+ */
+    int pivot(std::vector<int>& vec, int pivot, int start, int end){
 
-        // вычисляем размер области
-        const int size = stop - start + 1;
+        /* Now we need to go into the array with a starting left and right value. */
+        int left = start, right = end-1;
+        while(left < right){
+            /* Increase the left and the right values until inappropriate value comes */
+            while(vec.at(left) < pivot && left <= right) left++;
+            while(vec.at(right) > pivot && right >= left) right--;
 
-        // В случае отсутствия как минимум 3 элементов в указанной области,
-        // возвращаем индекс правой границы.
-        if (size < 3) {
-            return stop;
+            /* In case of duplicate values, we must take care of this special case. */
+            if(left >= right) break;
+            else if(vec.at(left) == vec.at(right)){ left++; continue; }
+
+            /* Do the normal swapping */
+            int temp = vec.at(left);
+            vec.at(left) = vec.at(right);
+            vec.at(right) = temp;
+        }
+        return right;
+    }
+
+
+/* Returns the k-th element of this array. */
+    int median_of_medians(std::vector<int>& vec, int k, int start, int end){
+        /* Start by base case: Sort if less than 10 size
+         * E.x.: Size = 9, 9 - 0 = 9.
+         */
+        if(end-start < 10){
+            sort(vec.begin()+start, vec.begin()+end);
+            return vec.at(k);
         }
 
-        // вычисляем индекс середины заданной области
-        const int middle = middle_of(start, stop);
-
-        // поиск медианы среди трех элементов по индексам start, middle и stop
-
-        int a = arr[start];
-        int b = arr[middle];
-        int c = arr[stop];
-        int pivot_index = stop;
-        if ((a - b) * (c - a) >= 0) {
-            pivot_index = start;
-        } else if ((b - a) * (c - b) >= 0) {
-            pivot_index = middle;
-        } else {
-            pivot_index = stop;
+        std::vector<int> medians;
+        /* Now sort every consecutive 5 */
+        for(int i = start; i < end; i+=5){
+            if(end - i < 10){
+                sort(vec.begin()+i, vec.begin()+end);
+                medians.push_back(vec.at((i+end)/2));
+            }
+            else{
+                sort(vec.begin()+i, vec.begin()+i+5);
+                medians.push_back(vec.at(i+2));
+            }
         }
 
-        return pivot_index;
+        int median = median_of_medians(medians, medians.size() / 2, 0, medians.size());
+
+        /* use the median to pivot around */
+        int piv = pivot(vec, median, start, end);
+        int length = piv - start+1;
+
+        if(k < length){
+            return median_of_medians(vec, k, start, piv);
+        }
+        else if(k > length){
+            return median_of_medians(vec, k - length, piv + 1, end);
+        }
+        else
+            return vec[k];
     }
 
     int partition(std::vector<int> &arr, int start, int stop, int pivot) {
-        assert(pivot >= start && pivot <= stop);
-        assert(!arr.empty() && start >= 0 && stop < arr.size() && start <= stop);
 
         // Tips:
         // 1. Переместите опорный элемент в конец области (потом вернем на нужно место)
@@ -85,8 +117,8 @@ namespace itis {
             return;
         }
 
-        // вычисляем индекс опорного элемента ... median_of_three ...
-        int pivot_index = median_of_three(arr, start, stop);
+        // вычисляем индекс опорного элемента ... median_of_medians ...
+        int pivot_index = median_of_medians(arr, 0, start, stop);
 
         // производим разбиение относительно опорного элемента ...  partition ...
         int partition_index = partition(arr, start, stop, pivot_index);
