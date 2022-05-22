@@ -6,7 +6,7 @@ using namespace std;
 using namespace itis;
 
 int main() {
-    std::vector<int> arr = {3, 5, 7, 6, 1, 2, 4, 8};
+    std::vector<int> arr = {5,4,3,2,1};
 
     QuickSort sort;
     sort.Sort(arr);
